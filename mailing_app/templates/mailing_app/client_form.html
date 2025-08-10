@@ -1,0 +1,16 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block title %}{{ view.object|default:"Добавить клиента" }}{% endblock %}
+
+{% block content %}
+<h1>
+    {% if view.object %}Редактировать клиента{% else %}Добавить клиента{% endif %}
+</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+    <a href="{% url 'mailing_app:client_list' %}">Отмена</a>
+</form>
+{% endblock %}

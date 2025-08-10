@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mailing App{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подключение простых стилей -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            margin: 0 0.25rem;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #222;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 0.5rem 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 6px;
+        }
+        /* Простая навигация вверху */
+        nav {
+            margin-bottom: 1.5rem;
+        }
+        nav a {
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav>
+        <a href="{% url 'mailing_app:client_list' %}">Клиенты</a>
+        <!-- Добавьте другие ссылки на разделы, например: -->
+        <a href="{% url 'mailing_app:message_list' %}">Сообщения</a>
+        <!-- <a href="{% url 'mailing_app:mailing_list' %}">Рассылки</a> -->
+    </nav>
+
+    {% block content %}
+    <!-- Контент из дочерних шаблонов будет сюда вставлен -->
+    {% endblock %}
+</div>
+</body>
+</html>

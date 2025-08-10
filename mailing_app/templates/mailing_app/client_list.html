@@ -1,0 +1,18 @@
+{% extends 'mailing_app/base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Клиенты</h1>
+<a href="{% url 'mailing_app:client_add' %}">Добавить клиента</a>
+<ul>
+  {% for client in clients %}
+    <li>
+      {{ client.full_name }} ({{ client.email }})
+      <a href="{% url 'mailing_app:client_form' client.pk %}">Редактировать</a> |
+      <a href="{% url 'mailing_app:client_confirm_delete' client.pk %}">Удалить</a>
+    </li>
+  {% empty %}
+    <li>Клиентов нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
