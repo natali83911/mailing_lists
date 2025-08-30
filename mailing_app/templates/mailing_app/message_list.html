@@ -1,0 +1,17 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block content %}
+<h1>Сообщения</h1>
+<a href="{% url 'mailing_app:message_add' %}">Добавить сообщение</a>
+<ul>
+  {% for message in messages %}
+    <li>
+      {{ message.subject }}
+      <a href="{% url 'mailing_app:message_form' message.pk %}">Редактировать</a> |
+      <a href="{% url 'mailing_app:message_confirm_delete' message.pk %}">Удалить</a>
+    </li>
+  {% empty %}
+    <li>Сообщений нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block content %}
+<h1>Попытки отправки</h1>
+
+<form method="get">
+    <label>Фильтр по рассылке (ID):</label>
+    <input type="text" name="mailing" value="{{ request.GET.mailing }}">
+    <button type="submit">Фильтровать</button>
+</form>
+
+<ul>
+    {% for attempt in attempts %}
+        <li>Рассылка #{{ attempt.mailing.pk }}, {{ attempt.attempt_datetime|date:"d.m.Y H:i" }}, Статус: {{ attempt.get_status_display }}, Ответ сервера: {{ attempt.server_response }}</li>
+    {% empty %}
+        <li>Попыток нет.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

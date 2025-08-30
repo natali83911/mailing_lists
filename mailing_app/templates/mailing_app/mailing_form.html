@@ -1,0 +1,14 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block title %}{{ view.object|default:"Добавить рассылку" }}{% endblock %}
+
+{% block content %}
+<h1>{% if view.object %}Редактировать рассылку{% else %}Добавить рассылку{% endif %}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+    <a href="{% url 'mailing_app:mailing_list' %}">Отмена</a>
+</form>
+{% endblock %}
