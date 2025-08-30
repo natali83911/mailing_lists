@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>{% block title %}Mailing App{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Подключение простых стилей -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,13 +51,13 @@
 <div class="container">
     <nav>
         <a href="{% url 'mailing_app:client_list' %}">Клиенты</a>
-        <!-- Добавьте другие ссылки на разделы, например: -->
         <a href="{% url 'mailing_app:message_list' %}">Сообщения</a>
-        <!-- <a href="{% url 'mailing_app:mailing_list' %}">Рассылки</a> -->
+        <a href="{% url 'mailing_app:mailing_list' %}">Рассылки</a>
+        <a href="{% url 'mailing_app:mailingattempt_list' %}">Попытки отправки</a>
     </nav>
 
     {% block content %}
-    <!-- Контент из дочерних шаблонов будет сюда вставлен -->
+
     {% endblock %}
 </div>
 </body>
