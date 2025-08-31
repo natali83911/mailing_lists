@@ -7,7 +7,7 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% include 'mailing_app/form_fields.html' with form=form %}
     <button type="submit">Сохранить</button>
     <a href="{% url 'mailing_app:message_list' %}">Отмена</a>
 </form>

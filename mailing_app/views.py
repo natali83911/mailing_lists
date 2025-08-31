@@ -1,8 +1,11 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView, TemplateView
 
-from .form import MailingForm
+from .form import MailingForm, ClientForm, MessageForm
 from .models import Client, Message, Mailing, MailingAttempt
+from .services import send_mailing
 
 class ClientListView(ListView):
     model = Client
@@ -11,13 +14,13 @@ class ClientListView(ListView):
 
 class ClientCreateView(CreateView):
     model = Client
-    fields = ['email', 'full_name', 'comment']
+    form_class = ClientForm
     template_name = 'mailing_app/client_form.html'
     success_url = reverse_lazy('mailing_app:client_list')
 
 class ClientUpdateView(UpdateView):
     model = Client
-    fields = ['email', 'full_name', 'comment']
+    form_class = ClientForm
     template_name = 'mailing_app/client_form.html'
     success_url = reverse_lazy('mailing_app:client_list')
 
@@ -34,13 +37,13 @@ class MessageListView(ListView):
 
 class MessageCreateView(CreateView):
     model = Message
-    fields = ['subject', 'body']
+    form_class = MessageForm
     template_name = 'mailing_app/message_form.html'
     success_url = reverse_lazy('mailing_app:message_list')
 
 class MessageUpdateView(UpdateView):
     model = Message
-    fields = ['subject', 'body']
+    form_class = MessageForm
     template_name = 'mailing_app/message_form.html'
     success_url = reverse_lazy('mailing_app:message_list')
 
@@ -58,14 +61,12 @@ class MailingListView(ListView):
 class MailingCreateView(CreateView):
     model = Mailing
     form_class = MailingForm
-    fields = ['start_datetime', 'end_datetime', 'status', 'message', 'clients']
     template_name = 'mailing_app/mailing_form.html'
     success_url = reverse_lazy('mailing_app:mailing_list')
 
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
-    fields = ['start_datetime', 'end_datetime', 'status', 'message', 'clients']
     template_name = 'mailing_app/mailing_form.html'
     success_url = reverse_lazy('mailing_app:mailing_list')
 
@@ -87,6 +88,12 @@ class MailingAttemptListView(ListView):
             queryset = queryset.filter(mailing_id=mailing_id)
         return queryset
 
+class MailingSendView(View):
+    def post(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk)
+        send_mailing(mailing, from_email='your-email@example.com')
+        messages.success(request, f'Рассылка #{mailing.pk} успешно отправлена!')
+        return redirect('mailing_app:mailing_list')
 
 class HomeView(TemplateView):
     template_name = 'mailing_app/home.html'

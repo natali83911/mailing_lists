@@ -3,12 +3,18 @@
 {% block content %}
 <h1>Рассылки</h1>
 <a href="{% url 'mailing_app:mailing_add' %}">Добавить рассылку</a>
+
 <ul>
   {% for mailing in mailings %}
     <li>
-      {{ mailing }} 
+      {{ mailing }}
       <a href="{% url 'mailing_app:mailing_form' mailing.pk %}">Редактировать</a> |
-      <a href="{% url 'mailing_app:mailing_delete' mailing.pk %}">Удалить</a>
+      <a href="{% url 'mailing_app:mailing_delete' mailing.pk %}">Удалить</a> |
+
+      <form action="{% url 'mailing_app:mailing_send' mailing.pk %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Отправить</button>
+      </form>
     </li>
   {% empty %}
     <li>Рассылок нет.</li>
