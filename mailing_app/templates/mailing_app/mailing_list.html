@@ -1,23 +1,35 @@
 {% extends 'mailing_app/base.html' %}
+{% load group_tags %}
 
 {% block content %}
 <h1>Рассылки</h1>
-<a href="{% url 'mailing_app:mailing_add' %}">Добавить рассылку</a>
+
+{% if user.is_authenticated and not user|has_group:"Менеджеры" %}
+  <a href="{% url 'mailing_app:mailing_add' %}">Добавить рассылку</a>
+{% endif %}
 
 <ul>
   {% for mailing in mailings %}
     <li>
       {{ mailing }}
-      <a href="{% url 'mailing_app:mailing_form' mailing.pk %}">Редактировать</a> |
-      <a href="{% url 'mailing_app:mailing_delete' mailing.pk %}">Удалить</a> |
 
-      <form action="{% url 'mailing_app:mailing_send' mailing.pk %}" method="post" style="display:inline;">
+      {% if user.is_authenticated %}
+        {% if mailing.owner == user and not user|has_group:"Менеджеры" %}
+          <a href="{% url 'mailing_app:mailing_form' mailing.pk %}">Редактировать</a> |
+          <a href="{% url 'mailing_app:mailing_delete' mailing.pk %}">Удалить</a> |
+        {% endif %}
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <form action="{% url 'mailing_app:mailing_send' mailing.pk %}" method="post" style="display:inline;">
           {% csrf_token %}
           <button type="submit">Отправить</button>
-      </form>
+        </form>
+      {% endif %}
     </li>
   {% empty %}
     <li>Рассылок нет.</li>
   {% endfor %}
 </ul>
 {% endblock %}
+

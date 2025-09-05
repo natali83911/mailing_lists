@@ -1,3 +1,5 @@
+{% load group_tags %}
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -55,10 +57,24 @@
         <a href="{% url 'mailing_app:message_list' %}">Сообщения</a>
         <a href="{% url 'mailing_app:mailing_list' %}">Рассылки</a>
         <a href="{% url 'mailing_app:mailingattempt_list' %}">Попытки отправки</a>
+        {% if user.is_authenticated and user|has_group:"Менеджеры" %}
+        <a href="{% url 'users:user_list' %}">Управление пользователями</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <span>Привет, {{ user.email }}!</span>
+        <form method="post" action="{% url 'users:logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Выйти</button>
+        </form>
+
+        {% else %}
+            <a href="{% url 'users:login' %}">Вход</a>
+            <a href="{% url 'users:register' %}">Регистрация</a>
+        {% endif %}
     </nav>
 
     {% block content %}
-
     {% endblock %}
 </div>
 </body>

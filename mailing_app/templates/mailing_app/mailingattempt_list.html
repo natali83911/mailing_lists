@@ -13,7 +13,7 @@
     {% for attempt in attempts %}
         <li>Рассылка #{{ attempt.mailing.pk }}, {{ attempt.attempt_datetime|date:"d.m.Y H:i" }}, Статус: {{ attempt.get_status_display }}, Ответ сервера: {{ attempt.server_response }}</li>
     {% empty %}
-        <li>Попыток нет.</li>
+        <li>Попыток рассылок нет.</li>
     {% endfor %}
 </ul>
 
