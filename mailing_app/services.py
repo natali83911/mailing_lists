@@ -9,15 +9,18 @@ def send_mailing(mailing, from_email):
 
     for client in recipients:
         try:
-            send_mail(subject=subject, message=message, from_email=from_email,
-                      recipient_list=[client.email], fail_silently=False)
-            status = 'Упешно'
-            response = 'Письмо успешно отправлено'
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=from_email,
+                recipient_list=[client.email],
+                fail_silently=False,
+            )
+            status = "Success"
+            response = "Письмо успешно отправлено"
         except Exception as e:
-            status = 'Не успешно'
+            status = "Failed"
             response = str(e)
         MailingAttempt.objects.create(
-            mailing=mailing,
-            status=status,
-            server_response=response
+            mailing=mailing, status=status, server_response=response
         )

@@ -1,81 +1,62 @@
+{% load static %}
 {% load group_tags %}
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>{% block title %}Mailing App{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 2rem;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        a {
-            color: #0066cc;
-            text-decoration: none;
-            margin: 0 0.25rem;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        h1 {
-            color: #222;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li {
-            padding: 0.5rem 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 1.5rem;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 6px;
-        }
-        /* Простая навигация вверху */
-        nav {
-            margin-bottom: 1.5rem;
-        }
-        nav a {
-            margin-right: 1rem;
-            font-weight: bold;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'mailing_app:home' %}">Mailing App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a href="{% url 'mailing_app:client_list' %}" class="nav-link">Клиенты</a></li>
+                    <li class="nav-item"><a href="{% url 'mailing_app:message_list' %}" class="nav-link">Сообщения</a></li>
+                    <li class="nav-item"><a href="{% url 'mailing_app:mailing_list' %}" class="nav-link">Рассылки</a></li>
+                    <li class="nav-item"><a href="{% url 'mailing_app:mailingattempt_list' %}" class="nav-link">Попытки отправки</a></li>
+                     {% if not perms.mailing_app.can_view_all %}
+                    <li class="nav-item"><a href="{% url 'mailing_app:mailing_stats' %}" class="nav-link">Статистика рассылок</a></li>
+                    {% endif %}
+                    {% if perms.mailing_app.can_view_all %}
+                    <li class="nav-item"><a href="{% url 'users:user_list' %}" class="nav-link">Управление пользователями</a></li>
+                    {% endif %}
+                    <li class="nav-item"><a href="{% url 'users:detail' user.pk %}" class="nav-link">Мой профиль</a></li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if user.is_authenticated %}
+                <li class="nav-item d-flex align-items-center me-3">
+                    <span class="navbar-text">Привет, {{ user.email }}!</span>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Выйти</button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item"><a href="{% url 'users:login' %}" class="nav-link">Вход</a></li>
+                <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link">Регистрация</a></li>
+                <li class="nav-item"><a href="{% url 'users:password_reset' %}" class="nav-link">Забыли пароль?</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="container">
-    <nav>
-        <a href="{% url 'mailing_app:client_list' %}">Клиенты</a>
-        <a href="{% url 'mailing_app:message_list' %}">Сообщения</a>
-        <a href="{% url 'mailing_app:mailing_list' %}">Рассылки</a>
-        <a href="{% url 'mailing_app:mailingattempt_list' %}">Попытки отправки</a>
-        {% if user.is_authenticated and user|has_group:"Менеджеры" %}
-        <a href="{% url 'users:user_list' %}">Управление пользователями</a>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <span>Привет, {{ user.email }}!</span>
-        <form method="post" action="{% url 'users:logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Выйти</button>
-        </form>
-
-        {% else %}
-            <a href="{% url 'users:login' %}">Вход</a>
-            <a href="{% url 'users:register' %}">Регистрация</a>
-        {% endif %}
-    </nav>
-
     {% block content %}
     {% endblock %}
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

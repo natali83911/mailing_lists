@@ -5,7 +5,7 @@ from .models import Mailing, Client, Message
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = ['email', 'full_name', 'comment']
+        fields = ["email", "full_name", "comment"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,7 +19,7 @@ class ClientForm(forms.ModelForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['subject', 'body']
+        fields = ["subject", "body"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,10 +33,10 @@ class MessageForm(forms.ModelForm):
 class MailingForm(forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['start_datetime', 'end_datetime', 'status', 'message', 'clients']
+        fields = ["start_datetime", "end_datetime", "status", "message", "clients"]
         widgets = {
-            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            "start_datetime": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "end_datetime": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -49,10 +49,27 @@ class MailingForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        start = cleaned_data.get('start_datetime')
-        end = cleaned_data.get('end_datetime')
+        start = cleaned_data.get("start_datetime")
+        end = cleaned_data.get("end_datetime")
 
         if start and end and start >= end:
-            raise forms.ValidationError('Дата и время начала должны быть раньше даты и времени окончания.')
+            raise forms.ValidationError(
+                "Дата и время начала должны быть раньше даты и времени окончания."
+            )
 
         return cleaned_data
+
+
+from django.forms import BooleanField, ImageField
+
+
+class StyleFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for fild_name, fild in self.fields.items():
+            if isinstance(fild, BooleanField):
+                fild.widget.attrs["class"] = "form-check-input"
+            elif isinstance(fild, ImageField):
+                fild.widget.attrs["class"] = "form-control-file"
+            else:
+                fild.widget.attrs["class"] = "form-control"
