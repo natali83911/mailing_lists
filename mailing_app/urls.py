@@ -1,24 +1,13 @@
 from django.urls import path
 
 from users.views import MailingToggleActiveView
-from .views import UserMailingStatsView
-from .views import (
-    HomeView,
-    ClientListView,
-    ClientCreateView,
-    ClientUpdateView,
-    ClientDeleteView,
-    MessageListView,
-    MessageCreateView,
-    MessageUpdateView,
-    MessageDeleteView,
-    MailingListView,
-    MailingCreateView,
-    MailingUpdateView,
-    MailingDeleteView,
-    MailingAttemptListView,
-    MailingSendView,
-)
+
+from .views import (ClientCreateView, ClientDeleteView, ClientListView,
+                    ClientUpdateView, HomeView, MailingAttemptListView,
+                    MailingCreateView, MailingDeleteView, MailingListView,
+                    MailingSendView, MailingUpdateView, MessageCreateView,
+                    MessageDeleteView, MessageListView, MessageUpdateView,
+                    UserMailingStatsView)
 
 app_name = "mailing_app"
 
@@ -44,9 +33,7 @@ urlpatterns = [
     path("mailings/", MailingListView.as_view(), name="mailing_list"),
     path("mailings/add/", MailingCreateView.as_view(), name="mailing_add"),
     path("mailings/<int:pk>/form/", MailingUpdateView.as_view(), name="mailing_form"),
-    path(
-        "mailings/<int:pk>/delete/", MailingDeleteView.as_view(), name="mailing_delete"
-    ),
+    path("mailings/<int:pk>/delete/", MailingDeleteView.as_view(), name="mailing_delete"),
     path("mailings/<int:pk>/send/", MailingSendView.as_view(), name="mailing_send"),
     path(
         "mailings/<int:pk>/toggle-active/",

@@ -90,9 +90,7 @@ class MailingAttempt(models.Model):
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE)
 
     def __str__(self):
-        return (
-            f"Попытка #{self.pk} отправки по почте #{self.mailing.pk} - {self.status}"
-        )
+        return f"Попытка #{self.pk} отправки по почте #{self.mailing.pk} - {self.status}"
 
     class Meta:
         permissions = [

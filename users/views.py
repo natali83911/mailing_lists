@@ -8,13 +8,8 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import (
-    CreateView,
-    ListView,
-    DetailView,
-    UpdateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
 from config.settings import EMAIL_HOST_USER
 from mailing_app.models import Mailing
@@ -112,10 +107,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if (
-            self.request.user.is_superuser
-            or self.object.email == self.request.user.email
-        ):
+        if self.request.user.is_superuser or self.object.email == self.request.user.email:
             return self.object
         raise PermissionDenied
 
@@ -133,10 +125,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if (
-            self.request.user.is_superuser
-            or self.object.email == self.request.user.email
-        ):
+        if self.request.user.is_superuser or self.object.email == self.request.user.email:
             return self.object
         raise PermissionDenied
 
@@ -164,10 +153,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if (
-            self.request.user.is_superuser
-            or self.object.email == self.request.user.email
-        ):
+        if self.request.user.is_superuser or self.object.email == self.request.user.email:
             return self.object
         raise PermissionDenied
 

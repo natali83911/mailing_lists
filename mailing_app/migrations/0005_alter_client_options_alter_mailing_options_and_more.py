@@ -12,26 +12,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name="client",
-            options={
-                "permissions": [("can_view_all", "Can view all records for managers")]
-            },
+            options={"permissions": [("can_view_all", "Can view all records for managers")]},
         ),
         migrations.AlterModelOptions(
             name="mailing",
-            options={
-                "permissions": [("can_view_all", "Can view all records for managers")]
-            },
+            options={"permissions": [("can_view_all", "Can view all records for managers")]},
         ),
         migrations.AlterModelOptions(
             name="mailingattempt",
-            options={
-                "permissions": [("can_view_all", "Can view all records for managers")]
-            },
+            options={"permissions": [("can_view_all", "Can view all records for managers")]},
         ),
         migrations.AlterModelOptions(
             name="message",
-            options={
-                "permissions": [("can_view_all", "Can view all records for managers")]
-            },
+            options={"permissions": [("can_view_all", "Can view all records for managers")]},
         ),
     ]

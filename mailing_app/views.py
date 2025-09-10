@@ -1,32 +1,23 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.views.generic import (
-    View,
-    ListView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.generic import (CreateView, DeleteView, ListView,
+                                  TemplateView, UpdateView, View)
 
 from config.settings import EMAIL_HOST_USER
-from .forms import MailingForm, ClientForm, MessageForm
-from .models import Client, Message, Mailing, MailingAttempt
+
+from .forms import ClientForm, MailingForm, MessageForm
+from .models import Client, Mailing, MailingAttempt, Message
 from .services import send_mailing
-
-
-from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class OwnerRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         obj = self.get_object()
-        return obj.owner == self.request.user or self.request.user.has_perm(
-            "mailing_app.can_view_all"
-        )
+        return obj.owner == self.request.user or self.request.user.has_perm("mailing_app.can_view_all")
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -155,12 +146,6 @@ class MailingDeleteView(LoginRequiredMixin, OwnerRequiredMixin, DeleteView):
     success_url = reverse_lazy("mailing_app:mailing_list")
 
 
-from django.views.generic import TemplateView
-from mailing_app.models import Mailing, MailingAttempt
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-
-
 @method_decorator(cache_page(60 * 15), name="dispatch")
 class UserMailingStatsView(TemplateView):
     template_name = "mailing_app/mailing_stats.html"
@@ -241,7 +226,5 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["total_mailings"] = Mailing.objects.count()
         context["active_mailings"] = Mailing.objects.filter(status="Started").count()
-        context["unique_clients"] = (
-            Client.objects.filter(mailing__status="Started").distinct().count()
-        )
+        context["unique_clients"] = Client.objects.filter(mailing__status="Started").distinct().count()
         return context

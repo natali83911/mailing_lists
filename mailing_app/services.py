@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+
 from .models import MailingAttempt
 
 
@@ -21,6 +22,4 @@ def send_mailing(mailing, from_email):
         except Exception as e:
             status = "Failed"
             response = str(e)
-        MailingAttempt.objects.create(
-            mailing=mailing, status=status, server_response=response
-        )
+        MailingAttempt.objects.create(mailing=mailing, status=status, server_response=response)

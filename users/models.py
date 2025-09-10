@@ -27,19 +27,11 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email адрес"), unique=True)
-    avatar = models.ImageField(
-        upload_to="users/avatars/", verbose_name="Аватар", blank=True, null=True
-    )
-    phone_number = models.CharField(
-        max_length=20, verbose_name="Телефон", blank=True, null=True
-    )
-    country = models.CharField(
-        max_length=50, verbose_name="Страна", blank=True, null=True
-    )
+    avatar = models.ImageField(upload_to="users/avatars/", verbose_name="Аватар", blank=True, null=True)
+    phone_number = models.CharField(max_length=20, verbose_name="Телефон", blank=True, null=True)
+    country = models.CharField(max_length=50, verbose_name="Страна", blank=True, null=True)
 
-    token = models.CharField(
-        max_length=100, verbose_name="Токен", blank=True, null=True
-    )
+    token = models.CharField(max_length=100, verbose_name="Токен", blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

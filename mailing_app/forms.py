@@ -1,5 +1,7 @@
 from django import forms
-from .models import Mailing, Client, Message
+from django.forms import BooleanField, ImageField
+
+from .models import Client, Mailing, Message
 
 
 class ClientForm(forms.ModelForm):
@@ -53,14 +55,9 @@ class MailingForm(forms.ModelForm):
         end = cleaned_data.get("end_datetime")
 
         if start and end and start >= end:
-            raise forms.ValidationError(
-                "Дата и время начала должны быть раньше даты и времени окончания."
-            )
+            raise forms.ValidationError("Дата и время начала должны быть раньше даты и времени окончания.")
 
         return cleaned_data
-
-
-from django.forms import BooleanField, ImageField
 
 
 class StyleFormMixin:
