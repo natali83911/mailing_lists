@@ -1,0 +1,21 @@
+{% extends 'mailing_app/base.html' %}
+{% load group_tags %}
+
+{% block title %}Статистика рассылок{% endblock %}
+
+{% block content %}
+<h1>Статистика рассылок</h1>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item">Всего рассылок: {{ total_mailings }}</li>
+    <li class="list-group-item">Активных рассылок: {{ active_mailings }}</li>
+    <li class="list-group-item">Уникальных получателей: {{ unique_clients }}</li>
+</ul>
+
+{% if perms.mailing_app.can_view_all %}
+<div class="alert alert-info">
+    <strong>Доступ для менеджеров:</strong> Вы видите эту статистику как пользователь из группы "Менеджер".
+</div>
+{% endif %}
+
+{% endblock %}

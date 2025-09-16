@@ -1,0 +1,31 @@
+{% extends 'mailing_app/base.html' %}
+{% load group_tags %}
+{% load custom_filters %}
+
+{% block title %}Сообщения{% endblock %}
+
+{% block content %}
+<h1>Сообщения</h1>
+{% if user.is_authenticated %}
+<a href="{% url 'mailing_app:message_add' %}" class="btn btn-outline-primary mb-3">Добавить сообщение</a>
+{% endif %}
+<ul class="list-group">
+  {% for message in messages %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    {{ message.subject }}
+    <div>
+      {% if perms.mailing_app.change_message or message|is_owner:user %}
+        <a href="{% url 'mailing_app:message_form' message.pk %}" class="btn btn-sm btn-outline-secondary me-2">Редактировать</a>
+      {% endif %}
+      {% if perms.mailing_app.delete_message or message|is_owner:user %}
+        <a href="{% url 'mailing_app:message_confirm_delete' message.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+      {% endif %}
+    </div>
+  </li>
+  {% empty %}
+  <li class="list-group-item">Сообщений нет.</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends 'mailing_app/base.html' %}
+{% load form_tags %}
+
+{% block title %}
+    {% if view.object %}Редактировать сообщение{% else %}Добавить сообщение{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>
+    {% if view.object %}Редактировать сообщение{% else %}Добавить сообщение{% endif %}
+</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% include 'mailing_app/form_fields.html' with form=form %}
+
+    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+    <a href="{% url 'mailing_app:message_list' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+</form>
+{% endblock %}

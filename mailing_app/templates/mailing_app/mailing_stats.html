@@ -1,0 +1,29 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block title %}Моя статистика рассылок{% endblock %}
+
+{% block content %}
+<h1>Статистика по вашим рассылкам</h1>
+<p>Пользователь: {{ user }}</p>
+<p>Всего статистик: {{ stats|length }}</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Рассылка</th>
+      <th>Всего попыток</th>
+      <th>Успешных</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stat in stats %}
+      <tr>
+        <td>{{ stat.mailing }}</td>
+        <td>{{ stat.total_attempts }}</td>
+        <td>{{ stat.successful_attempts }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3">Нет рассылок.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

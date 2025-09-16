@@ -1,0 +1,14 @@
+{% extends 'mailing_app/base.html' %}
+
+{% block title %}Подтверждение удаления{% endblock %}
+
+{% block content %}
+<h1>Удаление сообщения</h1>
+<p>Вы уверены, что хотите удалить сообщение: <strong>{{ object.subject }}</strong>?</p>
+
+<form method="post" class="mb-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">Подтвердить удаление</button>
+    <a href="{% url 'mailing_app:message_list' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+</form>
+{% endblock %}

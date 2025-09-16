@@ -1,0 +1,34 @@
+{% extends 'mailing_app/base.html' %}
+{% load static %}
+{% load group_tags %}
+{% load custom_filters %}
+
+{% block title %}Клиенты{% endblock %}
+
+{% block content %}
+<h1>Клиенты</h1>
+
+{% if user.is_authenticated and not perms.mailing_app.can_view_all %}
+<a href="{% url 'mailing_app:client_add' %}" class="btn btn-outline-primary mb-3">Добавить клиента</a>
+{% endif %}
+
+<ul class="list-group">
+  {% for client in clients %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    {{ client.full_name }} ({{ client.email }})
+
+    <div>
+      {% if user.is_authenticated %}
+      {% if client|is_owner:user or perms.mailing_app.change_client %}
+      <a href="{% url 'mailing_app:client_form' client.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+      <a href="{% url 'mailing_app:client_confirm_delete' client.pk %}" class="btn btn-sm btn-outline-danger ms-2">Удалить</a>
+      {% endif %}
+      {% endif %}
+    </div>
+  </li>
+  {% empty %}
+    <li class="list-group-item">Клиентов нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
+

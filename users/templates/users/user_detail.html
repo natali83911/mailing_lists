@@ -1,0 +1,29 @@
+{% extends 'mailing_app/base.html' %}
+{% load group_tags %}
+
+{% block title %}Профиль {{ object.email }}{% endblock %}
+
+{% block content %}
+<h1>Профиль пользователя</h1>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Имя:</strong> {{ object.first_name }}</li>
+    <li class="list-group-item"><strong>Фамилия:</strong> {{ object.last_name }}</li>
+    <li class="list-group-item"><strong>Email:</strong> {{ object.email }}</li>
+    <li class="list-group-item"><strong>Телефон:</strong> {{ object.phone_number|default:"не указан" }}</li>
+    <li class="list-group-item"><strong>Страна:</strong> {{ object.country|default:"не указана" }}</li>
+    {% if object.avatar %}
+        <li class="list-group-item">
+            <img src="{{ object.avatar.url }}" alt="Аватар" width="150" class="rounded">
+        </li>
+    {% endif %}
+</ul>
+
+{% if perms.mailing_app.can_view_all or user == object %}
+<a href="{% url 'users:update' object.pk %}" class="btn btn-outline-primary">Редактировать профиль</a>
+{% endif %}
+{% if perms.mailing_app.can_view_all %}
+<a href="{% url 'users:user_list' %}" class="btn btn-outline-secondary ms-2">К списку пользователей</a>
+{% endif %}
+{% endblock %}
+

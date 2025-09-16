@@ -1,0 +1,46 @@
+{% extends 'mailing_app/base.html' %}
+{% load group_tags %}
+{% load custom_filters %}
+
+{% block title %}Рассылки{% endblock %}
+
+{% block content %}
+<h1>Рассылки</h1>
+
+{% if user.is_authenticated and not perms.mailing_app.can_view_all %}
+  <a href="{% url 'mailing_app:mailing_add' %}" class="btn btn-outline-primary mb-3">Добавить рассылку</a>
+{% endif %}
+
+<ul class="list-group">
+  {% for mailing in mailings %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    {{ mailing }}
+
+    <div>
+      {% if user.is_authenticated %}
+        {% if mailing|is_owner:user and not perms.mailing_app.can_view_all %}
+          <a href="{% url 'mailing_app:mailing_form' mailing.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+          <a href="{% url 'mailing_app:mailing_delete' mailing.pk %}" class="btn btn-sm btn-outline-danger ms-2">Удалить</a>
+        {% endif %}
+        <form action="{% url 'mailing_app:mailing_send' mailing.pk %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-success ms-2">Отправить</button>
+        </form>
+      {% endif %}
+      {% if perms.mailing_app.can_view_all %}
+        <form action="{% url 'mailing_app:mailing_toggle_active' mailing.pk %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          {% if mailing.is_active %}
+             <button type="submit" class="btn btn-sm btn-outline-warning">Отключить</button>
+          {% else %}
+             <button type="submit" class="btn btn-sm btn-outline-success">Включить</button>
+          {% endif %}
+        </form>
+      {% endif %}
+    </div>
+  </li>
+  {% empty %}
+  <li class="list-group-item">Рассылок нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
