@@ -14,10 +14,10 @@
   <li class="list-group-item d-flex justify-content-between align-items-center">
     {{ message.subject }}
     <div>
-      {% if perms.mailing_app.change_message and message|is_owner:user %}
+      {% if perms.mailing_app.change_message or message|is_owner:user %}
         <a href="{% url 'mailing_app:message_form' message.pk %}" class="btn btn-sm btn-outline-secondary me-2">Редактировать</a>
       {% endif %}
-      {% if perms.mailing_app.delete_message and message|is_owner:user %}
+      {% if perms.mailing_app.delete_message or message|is_owner:user %}
         <a href="{% url 'mailing_app:message_confirm_delete' message.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
       {% endif %}
     </div>
